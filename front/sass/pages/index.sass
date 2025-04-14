@@ -9,6 +9,14 @@ $font-suisse-intl-bold: SuisseIntl-Bold, sans-serif
 $font-legal: DINPro-CondLight, sans-serif
 $font-riffic-bold: Riffic-Bold, sans-serif
 
+.opacity
+  z-index: -1
+  opacity: 0
+  pointer-events: none
+
+.hide
+  display: none !important
+
 body
   overscroll-behavior: none
   img
@@ -60,8 +68,97 @@ body
     height: 38px
     margin-left: 10px
 
+.overlay
+  position: fixed
+  left: 0
+  top: 0
+  width: 100%
+  height: 100%
+  background: rgba(black, .4)
+  backdrop-filter: blur(5px)
+  z-index: 10
+  display: flex
+  align-items: center
+  justify-content: center
+  .popup
+    background: white
+    font-size: 25px
+    width: 300px
+    height: 300px
+    border-radius: 10px
+    border: 1px solid black
+    margin: auto
+    display: flex
+    align-items: center
+    justify-content: center
+    &__text
+      color: black
+      text-transform: uppercase
+      text-align: center
+
+
+
 .legal
   font-family: $font-legal
   font-size: 4.7vw
   padding: 0 15px
   text-align: center
+
+
+.container
+  text-align: center
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3)
+  border-radius: 15px
+  padding: 20px
+  height: 100%
+  background-color: #ffffff10
+  backdrop-filter: blur(8px)
+  border: 1px solid rgba(255, 255, 255, 0.2)
+
+h1
+  margin-bottom: 20px
+
+#game
+  display: grid
+  grid-template-columns: repeat(3, 100px)
+  gap: 10px
+  margin: 0 auto 20px
+  width: fit-content
+
+.cell
+  width: 100px
+  height: 100px
+  color: white
+  background: black
+  border-radius: 10px
+  display: flex
+  align-items: center
+  justify-content: center
+  font-size: 36px
+  font-weight: bold
+  cursor: pointer
+  transition: transform 0.2s, background-color 0.3s
+
+  &:hover
+    background-color: #f1f1f1
+    transform: scale(1.05)
+
+  &.taken
+    pointer-events: none
+
+#status
+  font-size: 18px
+  margin: 10px 0
+
+#restart
+  padding: 10px 20px
+  font-size: 16px
+  background-color: #4e4376
+  color: white
+  border: none
+  border-radius: 5px
+  cursor: pointer
+  transition: background-color 0.3s
+
+  &:hover
+    background-color: #6a6180

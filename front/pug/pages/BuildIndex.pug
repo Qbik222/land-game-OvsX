@@ -1,16 +1,17 @@
 .land
-    .land__logo
-        img(src="./img/logo.png" alt="favbet")
-    //.land__left
-    //    .land__title До нових висот з бонусом*
-    //    .land__prize 15 000₴
-    //    .land__spins + 300 фрiспiнiв
-    //    .land__btn хапай штурвал
-    //.land__right
-    //    .land__right-pers
-    //        img(src="./img/pers.png" alt="favbet")
-    //    .land__right-plane
-    //        img(src="./img/plane.png" alt="favbet")
+    .container
+        #game
+            each val, index in Array(9)
+                .cell(data-index=index)
+        #status
+        button#restart Перезапустити
+    .overlay.opacity
+        .popup._lose.hide
+            .popup__text ти програв, лови фріспіни
+        .popup._draw.hide
+            .popup__text нічия лови фріспіни
+        .popup._win.hide
+            .popup__text ти виграв, лови фріспіни
 .footer
     .footer__text  ТОВ «БУКМЕКЕРСЬКА КОМПАНІЯ «ФАВБЕТ». Ліцензія на провадження діяльності з організації та проведення букмекерської діяльності від 28.12.2022, видана згідно з рішенням КРАІЛ № 433 від 13.12.2022 та Ліцензія на провадження діяльності з організації та проведення азартних ігор казино в мережі Інтернет від 20.04.2021, видана згідно з рішенням КРАІЛ № 137 від 05.04.2021, зі змінами.
     .footer__wrap
