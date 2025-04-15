@@ -121,6 +121,7 @@ function handleCellClick(e) {
             showPopup("._win")
             endGame();
         } else if (isDraw()) {
+            showPopup("._draw")
             statusText.textContent = "Нічия!";
         } else {
             currentPlayer = computerPlayer;
