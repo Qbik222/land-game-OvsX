@@ -1,10 +1,15 @@
 .land
     .container
-        #game
+        #side-selection
+            p Обери сторону
+            button.side-btn(data-side="X") Хрестик (X)
+            button.side-btn(data-side="O") Нолик (O)
+        #game(style="display: none")
             each val, index in Array(9)
                 .cell(data-index=index)
         #status
-        button#restart Перезапустити
+        button#restart(style="display: none") Перезапустити
+
     .overlay.opacity
         .popup._lose.hide
             .popup__text ти програв, лови фріспіни

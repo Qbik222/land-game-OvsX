@@ -2,6 +2,9 @@ const cells = document.querySelectorAll('.cell');
 const statusText = document.getElementById('status');
 const restartBtn = document.getElementById('restart');
 const overlay = document.querySelector(".overlay");
+const sideBtns = document.querySelectorAll('.side-btn');
+const gameContainer = document.getElementById('game');
+
 
 let board = ['', '', '', '', '', '', '', '', ''];
 let isComputerX = true; // Чередує роль комп'ютера між X та O
@@ -65,8 +68,9 @@ function bestMove() {
         showPopup("._lose")
         endGame();
     } else if (isDraw()) {
-        statusText.textContent = "Нічия!";
         showPopup("._draw")
+        statusText.textContent = "Нічия!";
+
     } else {
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
         statusText.textContent = `Ваш хід (${currentPlayer})`;
@@ -137,7 +141,16 @@ restartBtn.addEventListener('click', () => {
 
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 
-initializeGame();
+sideBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const side = btn.dataset.side;
+        isComputerX = side !== 'X'; // Якщо гравець X, комп'ютер буде O
+        document.getElementById('side-selection').style.display = 'none';
+        gameContainer.style.display = '';
+        restartBtn.style.display = '';
+        initializeGame();
+    });
+});
 
 function showPopup(popup){
     console.log(popup)
