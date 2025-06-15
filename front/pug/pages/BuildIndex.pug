@@ -1,21 +1,104 @@
+.test-menu
+    button.test-popup(data-popup="._win") Тест Win
+    button.test-popup(data-popup="._lose") Тест Lose
+    button.test-popup(data-popup="._draw") Тест Draw
 .land
+    .land__logo
+        img(src="./img/logo.png" alt="favbet")
+    .decor
     .container
-        #side-selection
-            p Обери сторону
-            button.side-btn(data-side="X") Хрестик (X)
-            button.side-btn(data-side="O") Нолик (O)
-        #game(style="display: none")
-            each val, index in Array(9)
-                .cell(data-index=index)
-        #status
+        .land__left
+            .land__left-wrap
+                .land__title
+                    .land__title-item(data-text="постав") постав
+                    .land__title-item(data-text="в ряд!") в ряд!
+                .land__status
+                    .land__status-left
+                        .land__status-left-item(data-player='X')
+                        .land__status-left-item(data-player="O")
+                    .land__status-right
+                        .land__status-right-text
+                            #status
+                            #status-text
+                        .land__status-right-icon
+
+
+
+        .game-wrapper
+            .game-pers._left
+            .game-pers._right
+            .game-grid
+            #game(style="opacity: 0")
+                each val, index in Array(9)
+                    .cell(data-index=index)
         button#restart(style="display: none") Перезапустити
 
-    .overlay.opacity
+    .overlay
+        .popup._start#side-selection
+            .popup__pers
+                picture
+                    source(media="(max-width: 600px)" srcset='img/pers-mob.png')
+                    source(media="(max-width: 950px) and (max-width: 600px) and (orientation: landscape)" srcset='img/pers-mob.png')
+                    img(src="img/pers-desc.png" alt="Favbet" )
+            .popup__coins
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+            .popup__text-start Вибери гравця <br> та отримай додатковий бонус
+            .popup__btns
+                .popup__btns-item.side-btn(data-side="X")
+                    .popup__btns-item-choose
+                    .popup__btns-item-icon.playerX
+                    .popup__btns-item-player Гравець 01
+                    .popup__btns-item-status обрано
+                .popup__btns-item.side-btn(data-side="0")
+                    .popup__btns-item-choose
+                    .popup__btns-item-icon.playerO
+                    .popup__btns-item-player Гравець 02
+                    .popup__btns-item-status обрано
+            .popup__btn.btn.start-game почати гру
+            .popup__reflection
+                img(src="img/popup/start/reflection-btn.png")
         .popup._lose.hide
+            .popup__pers
+                picture
+                    source(media="(max-width: 600px)" srcset='img/pers-mob.png')
+                    source(media="(max-width: 950px) and (max-width: 600px) and (orientation: landscape)" srcset='img/pers-mob.png')
+                    img(src="img/pers-desc.png" alt="Favbet" )
+            .popup__coins
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
             .popup__text ти програв, лови фріспіни
         .popup._draw.hide
+            .popup__pers
+                picture
+                    source(media="(max-width: 600px)" srcset='img/pers-mob.png')
+                    source(media="(max-width: 950px) and (max-width: 600px) and (orientation: landscape)" srcset='img/pers-mob.png')
+                    img(src="img/pers-desc.png" alt="Favbet" )
+            .popup__coins
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
             .popup__text нічия лови фріспіни
         .popup._win.hide
+            .popup__pers
+                picture
+                    source(media="(max-width: 600px)" srcset='img/pers-mob.png')
+                    source(media="(max-width: 950px) and (max-width: 600px) and (orientation: landscape)" srcset='img/pers-mob.png')
+                    img(src="img/pers-desc.png" alt="Favbet" )
+            .popup__coins
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
             .popup__text ти виграв, лови фріспіни
 .footer
     .footer__text  ТОВ «БУКМЕКЕРСЬКА КОМПАНІЯ «ФАВБЕТ». Ліцензія на провадження діяльності з організації та проведення букмекерської діяльності від 28.12.2022, видана згідно з рішенням КРАІЛ № 433 від 13.12.2022 та Ліцензія на провадження діяльності з організації та проведення азартних ігор казино в мережі Інтернет від 20.04.2021, видана згідно з рішенням КРАІЛ № 137 від 05.04.2021, зі змінами.
