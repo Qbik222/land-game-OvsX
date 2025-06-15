@@ -26,6 +26,19 @@ $font-press-start2p: PressStart2P, sans-serif
 *
   cursor: url("../img/cursor.png") 16 16, auto
 
+.win-line
+  position: absolute
+  width: 100%
+  height: 70px
+  //background: #00f0ff
+  background: url("../img/game/win-line.png") no-repeat 50% 0/cover
+  border-radius: 4px
+  transform: scaleX(0)
+  transform-origin: center center
+  transition: all 1s ease
+  opacity: 0
+  z-index: 10
+  
 #restart
   display: none
 
@@ -399,11 +412,11 @@ body
 .container
   display: flex
   align-items: center
-  justify-content: center
+  justify-content: flex-start
   text-align: center
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3)
   border-radius: 15px
-  padding: 20px
+  padding: 20px 20px 20px 50px
   height: 100%
   position: relative
   z-index: 3
@@ -447,12 +460,14 @@ h1
   //margin: 0 auto 20px
   //width: fit-content
   z-index: 2
+  transition: all 1s ease-in-out
 
 .game-pers
   background: url("../img/game/pers-desc.png") no-repeat 0 0/contain
   position: absolute
   pointer-events: none
   z-index: 3
+  transition: all 3s ease-in-out
   &._left
     width: 450px
     height: 280px
@@ -475,6 +490,7 @@ h1
   background: url("../img/game/grid-desc.png") no-repeat 0 0/cover
   background-size: 100% 100%
   pointer-events: none
+  transition:  all 1s ease-in-out
   @media screen and (max-width: 600px)
     background: url("../img/game/grid-mob.png") no-repeat 0 0/cover
     background-size: 100% 100%

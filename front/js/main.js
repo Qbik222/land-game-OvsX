@@ -1,8 +1,8 @@
 const cells = document.querySelectorAll('.cell');
 const statusText = document.getElementById('status');
 const statusTextInfo = document.getElementById('status-text');
-const statusContainer = document.querySelector(".land__left")
-const statusBox = document.querySelector(".land__status")
+const statusContainer = document.querySelector(".land__left");
+const statusBox = document.querySelector(".land__status");
 const restartBtn = document.getElementById('restart');
 const overlay = document.querySelector(".overlay");
 const sideBtns = document.querySelectorAll('.side-btn');
@@ -11,16 +11,18 @@ const gameContainer = document.getElementById('game');
 const landWrapper = document.querySelector('.land');
 const statusIconX = document.querySelector('[data-player="X"]');
 const statusIconO = document.querySelector('[data-player="O"]');
-
+const gameGrid = document.querySelector('.game-grid');
+const persLeft = document.querySelector('.game-pers._left');
+const persRight = document.querySelector('.game-pers._right');
 
 let board = ['', '', '', '', '', '', '', '', ''];
-let isComputerX = true; // Чередує роль комп'ютера між X та O
+let isComputerX = true;
 let currentPlayer, computerPlayer;
 
 if (isComputerX) {
     document.querySelector('[data-side="X"]').classList.remove('_active');
     document.querySelector('[data-side="0"]').classList.add('_active');
-}else{
+} else {
     document.querySelector('[data-side="0"]').classList.remove('_active');
     document.querySelector('[data-side="X"]').classList.add('_active');
 }
@@ -42,11 +44,16 @@ function initializeGame() {
     board = ['', '', '', '', '', '', '', '', ''];
     cells.forEach(cell => {
         cell.textContent = '';
-        cell.classList.remove('taken');
+        cell.classList.remove('taken', 'X-player', 'O-player');
     });
 
-    checkStatusIcon(currentPlayer)
-    checkStatusContainer(currentPlayer)
+    const line = document.querySelector('.win-line');
+    if (line) {
+        line.style.transform = 'scaleX(0)';
+    }
+
+    checkStatusIcon(currentPlayer);
+    checkStatusContainer(currentPlayer);
 
     statusText.textContent = `${currentPlayer}`;
     statusTextInfo.textContent = `ТВІЙ_ХІД`;
@@ -56,28 +63,22 @@ function initializeGame() {
 }
 
 function checkStatusIcon(player) {
-
-    console.log(player)
-
-    if(player === 'Гравець 01'){
+    if (player === 'Гравець 01') {
         statusIconX.classList.add("_active");
         statusIconO.classList.remove("_active");
     }
-    if(player === 'Гравець 02'){
+    if (player === 'Гравець 02') {
         statusIconO.classList.add("_active");
         statusIconX.classList.remove("_active");
     }
 }
 
 function checkStatusContainer(player) {
-
-    console.log(player)
-
-    if(player === 'Гравець 01'){
+    if (player === 'Гравець 01') {
         statusBox.classList.add("X-player");
         statusBox.classList.remove("O-player");
     }
-    if(player === 'Гравець 02'){
+    if (player === 'Гравець 02') {
         statusBox.classList.add("O-player");
         statusBox.classList.remove("X-player");
     }
@@ -92,20 +93,12 @@ function checkWinner(player) {
     return null;
 }
 
-
-// function checkWinner(player) {
-//     return winningCombos.some(combo =>
-//         combo.every(index => board[index] === player)
-//     );
-// }
-
 function isDraw() {
     return board.every(cell => cell !== '');
 }
 
 function bestMove() {
-
-    setTimeout(() =>{
+    setTimeout(() => {
         let bestScore = -Infinity;
         let move;
 
@@ -120,51 +113,47 @@ function bestMove() {
                 }
             }
         }
+
         board[move] = computerPlayer;
 
-        // cells[move].classList.add('taken');
-
-        if(computerPlayer === "Гравець 02") {
+        if (computerPlayer === "Гравець 02") {
             cells[move].classList.add('O-player');
         }
-        if(computerPlayer === "Гравець 01") {
+        if (computerPlayer === "Гравець 01") {
             cells[move].classList.add('X-player');
         }
-        checkStatusIcon(computerPlayer)
-        checkStatusContainer(currentPlayer)
+
+        checkStatusIcon(computerPlayer);
+        checkStatusContainer(currentPlayer);
         statusTextInfo.textContent = `ЧЕКАЙ`;
 
-        // cells[move].textContent = computerPlayer;
         cells[move].classList.add('taken');
-        if (checkWinner(computerPlayer)) {
+
+        const winningCombo = checkWinner(computerPlayer);
+        if (winningCombo) {
+            showWinLine(winningCombo);
             statusText.textContent = `${computerPlayer}`;
-            showPopup("._lose")
+            showPopup("._lose");
             endGame();
         } else if (isDraw()) {
-            showPopup("._draw")
+            showPopup("._draw");
             statusText.textContent = "Нічия!";
-
         } else {
-
-
-            setTimeout(() =>{
+            setTimeout(() => {
                 currentPlayer = currentPlayer === 'Гравець 01' ? 'Гравець 02' : 'Гравець 01';
-                checkStatusIcon(currentPlayer)
-                checkStatusContainer(currentPlayer)
+                checkStatusIcon(currentPlayer);
+                checkStatusContainer(currentPlayer);
                 statusTextInfo.textContent = `ТВІЙ_ХІД`;
                 statusText.textContent = `${currentPlayer}`;
-
-            }, 1500)
+            }, 1500);
         }
-    }, 1000)
-
-
+    }, 1000);
 }
 
 function minimax(board, depth, isMaximizing) {
-    if (checkWinner(computerPlayer)) return 10 - depth; // Комп'ютер виграв
-    if (checkWinner(currentPlayer)) return depth - 10; // Гравець виграв
-    if (isDraw()) return 0; // Нічия
+    if (checkWinner(computerPlayer)) return 10 - depth;
+    if (checkWinner(currentPlayer)) return depth - 10;
+    if (isDraw()) return 0;
 
     if (isMaximizing) {
         let bestScore = -Infinity;
@@ -198,32 +187,30 @@ function handleCellClick(e) {
     if (board[index] === '' && currentPlayer !== computerPlayer) {
         board[index] = currentPlayer;
 
-       console.log(currentPlayer);
-
-       if(currentPlayer === "Гравець 02") {
-           cell.classList.add('O-player');
-       }
-        if(currentPlayer === "Гравець 01") {
+        if (currentPlayer === "Гравець 02") {
+            cell.classList.add('O-player');
+        }
+        if (currentPlayer === "Гравець 01") {
             cell.classList.add('X-player');
         }
 
-
-        // cell.textContent = currentPlayer;
         cell.classList.add('taken');
 
-        if (checkWinner(currentPlayer)) {
-            setTimeout(() =>{
+        const winningCombo = checkWinner(currentPlayer);
+        if (winningCombo) {
+            showWinLine(winningCombo);
+            setTimeout(() => {
                 statusText.textContent = `${currentPlayer}`;
-                showPopup("._win")
+                hideAfterGame()
+                // showPopup("._win");
                 endGame();
-            }, 2000)
-
+            }, 2000);
         } else if (isDraw()) {
-            setTimeout(() =>{
-                showPopup("._draw")
+            setTimeout(() => {
+                hideAfterGame()
+                // showPopup("._draw");
                 statusText.textContent = "Нічия!";
-            }, 2000)
-
+            }, 2000);
         } else {
             currentPlayer = computerPlayer;
             statusText.textContent = `${computerPlayer}`;
@@ -232,12 +219,21 @@ function handleCellClick(e) {
     }
 }
 
+function hideAfterGame(){
+    gameContainer.style.opacity = "0";
+    gameGrid.style.opacity = "0";
+    statusBox.classList.remove("O-player", "X-player");
+    persLeft.style.transform = "translateX(200%)";
+    persRight.style.transform = "translateX(-200%) scale(-1, 1)";
+
+}
+
 function endGame() {
     cells.forEach(cell => cell.classList.add('taken'));
 }
 
 restartBtn.addEventListener('click', () => {
-    isComputerX = !isComputerX; // Чередуємо ролі
+    isComputerX = !isComputerX;
     initializeGame();
 });
 
@@ -246,58 +242,49 @@ cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 sideBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         const side = btn.dataset.side;
-        isComputerX = side !== 'X'; // Якщо гравець X, комп'ютер буде O
+        isComputerX = side !== 'X';
         sideBtns.forEach(item => item.classList.remove('_active'));
         btn.classList.add('_active');
     });
 });
 
-startGame.addEventListener('click', () =>{
+startGame.addEventListener('click', () => {
     document.getElementById('side-selection').style.opacity = '0';
     gameContainer.style.opacity = '1';
     restartBtn.style.display = '';
-    landWrapper.classList.add("_decor")
-    setTimeout(() =>{
+    landWrapper.classList.add("_decor");
+    setTimeout(() => {
         enableMouseScale(document.querySelector('.decor'));
-
-    }, 2500)
+    }, 2500);
     initializeGame();
     hidePopup("#side-selection");
 });
 
-
-
-function showPopup(popup){
-    console.log(popup)
-    popup = overlay.querySelector(popup)
-
-    overlay.classList.remove("opacity")
-    popup.classList.remove("hide")
+function showPopup(popup) {
+    popup = overlay.querySelector(popup);
+    overlay.classList.remove("opacity");
+    popup.classList.remove("hide");
 }
 
-function hidePopup(popup){
-    popup = overlay.querySelector(popup)
-    overlay.classList.add("opacity")
-    popup.classList.add("hide")
+function hidePopup(popup) {
+    popup = overlay.querySelector(popup);
+    overlay.classList.add("opacity");
+    popup.classList.add("hide");
 }
 
 function enableMouseScale(element) {
     const minScale = 1;
     const maxScale = 1.05;
-
     element.style.transition = 'transform 0.1s ease';
 
     document.addEventListener('mousemove', (e) => {
         const rect = element.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
-
         const distance = Math.hypot(x - centerX, y - centerY);
         const maxDistance = Math.hypot(centerX, centerY);
-
         const scale = minScale + (1 - distance / maxDistance) * (maxScale - minScale);
         element.style.transform = `scale(${Math.min(maxScale, Math.max(minScale, scale))})`;
     });
@@ -309,49 +296,45 @@ function enableMouseScale(element) {
 
 function showWinLine(combo) {
     const line = document.querySelector('.win-line');
-    line.style.transform = 'scaleX(0)'; // Reset before new line
-    line.style.width = '100%';
-    line.style.height = '4px';
-    line.style.background = '#00f0ff';
-
-    // Клітинки мають індекси від 0 до 8:
-    // 0 | 1 | 2
-    // 3 | 4 | 5
-    // 6 | 7 | 8
+    line.style.transform = 'scaleX(0)';
+    // line.style.width = '100%';
+    // line.style.height = '44px';
+    // line.style.background = '#00f0ff';
 
     const positions = {
-        '0,1,2': { top: '16.66%', left: '50%', rotate: '0deg' },
-        '3,4,5': { top: '50%', left: '50%', rotate: '0deg' },
-        '6,7,8': { top: '83.33%', left: '50%', rotate: '0deg' },
-        '0,3,6': { top: '50%', left: '16.66%', rotate: '90deg' },
-        '1,4,7': { top: '50%', left: '50%', rotate: '90deg' },
-        '2,5,8': { top: '50%', left: '83.33%', rotate: '90deg' },
-        '0,4,8': { top: '50%', left: '50%', rotate: '45deg' },
-        '2,4,6': { top: '50%', left: '50%', rotate: '-45deg' },
+        '0,1,2': { top: '26%', left: '50%', rotate: '0deg', width: '80%' },
+        '3,4,5': { top: '50%', left: '50%', rotate: '0deg', width: '80%' },
+        '6,7,8': { top: '78.33', left: '50%', rotate: '0deg', width: '80%' },
+        '0,3,6': { top: '50%', left: '24.5%', rotate: '90deg', width: '80%'},
+        '1,4,7': { top: '50%', left: '50%', rotate: '90deg', width: '80%' },
+        '2,5,8': { top: '50%', left: '76.5%', rotate: '90deg', width: '80%' },
+        '0,4,8': { top: '50%', left: '50%', rotate: '45deg', width: '100%' },
+        '2,4,6': { top: '50%', left: '50%', rotate: '-45deg', width: '100%' },
     };
 
     const key = combo.sort((a, b) => a - b).join(',');
     const pos = positions[key];
 
+    console.log(pos.width);
+
+    let width = pos.width;
+
     if (pos) {
         line.style.top = pos.top;
         line.style.left = pos.left;
         line.style.transform = `translate(-50%, -50%) rotate(${pos.rotate}) scaleX(1)`;
+        line.style.width = `${pos.width}`;
+        line.style.opacity = `1`;
     }
 }
 
-
-
-
 // test
 const testPopupButtons = document.querySelectorAll('.test-popup');
-
 testPopupButtons.forEach(button => {
     button.addEventListener('click', () => {
         const popupClass = button.dataset.popup;
         const popup = overlay.querySelector(popupClass);
         const allPopups = overlay.querySelectorAll('.popup');
-
         const isAlreadyOpen = !popup.classList.contains('hide');
 
         if (isAlreadyOpen) {
@@ -364,4 +347,3 @@ testPopupButtons.forEach(button => {
         }
     });
 });
-

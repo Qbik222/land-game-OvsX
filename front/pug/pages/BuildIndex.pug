@@ -29,6 +29,7 @@
             .game-pers._right
             .game-grid
             #game(style="opacity: 0")
+                .win-line
                 each val, index in Array(9)
                     .cell(data-index=index)
         button#restart(style="display: none") Перезапустити
