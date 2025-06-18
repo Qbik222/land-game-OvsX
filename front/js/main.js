@@ -418,3 +418,213 @@ testPopupButtons.forEach(button => {
         }
     });
 });
+
+
+// Додаємо цей код в кінець вашого існуючого скрипта
+
+// Створюємо випадаюче меню для тестових сценаріїв
+const testMenu = document.createElement('div');
+testMenu.className = 'test-dropdown';
+testMenu.innerHTML = `
+  <button class="test-dropdown-btn">Тест сценаріїв ▼</button>
+  <div class="test-dropdown-content">
+    <button class="test-scenario" data-scenario="win">Тест Win</button>
+    <button class="test-scenario" data-scenario="lose">Тест Lose</button>
+    <button class="test-scenario" data-scenario="draw">Тест Draw</button>
+    <button class="test-scenario" data-scenario="reset">Скинути гру</button>
+  </div>
+`;
+
+// Додаємо стилі для випадаючого меню
+const style = document.createElement('style');
+style.textContent = `
+  .test-dropdown {
+    z-index: 9999;
+  }
+  
+  .test-dropdown-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .test-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .test-dropdown-content button {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .test-dropdown-content button:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .test-dropdown:hover .test-dropdown-content {
+    display: block;
+  }
+`;
+
+document.head.appendChild(style);
+document.querySelector(".test-menu").appendChild(testMenu);
+
+// Функція для симуляції виграшу
+function simulateWin() {
+    // Очищаємо дошку
+    board = ['', '', '', '', '', '', '', '', ''];
+
+    // Встановлюємо виграшну комбінацію для гравця
+    board[0] = 'Гравець 01';
+    board[1] = 'Гравець 01';
+    board[2] = 'Гравець 01';
+
+    // Оновлюємо UI
+    cells.forEach((cell, index) => {
+        // cell.textContent = '';
+        cell.classList.remove('taken', 'X-player', 'O-player');
+
+        if (board[index] === 'Гравець 01') {
+            // cell.textContent = 'X';
+            cell.classList.add('X-player', 'taken');
+        }
+    });
+
+    // Показуємо лінію перемоги
+    showWinLine([0, 1, 2]);
+
+    // Запускаємо анімацію завершення гри
+    setTimeout(() => {
+        statusText.textContent = 'Гравець 01';
+        hideAfterGame("win");
+        endGame();
+    }, 1000);
+}
+
+// Функція для симуляції програшу
+function simulateLose() {
+    // Очищаємо дошку
+    board = ['', '', '', '', '', '', '', '', ''];
+
+    // Встановлюємо виграшну комбінацію для комп'ютера
+    board[3] = 'Гравець 02';
+    board[4] = 'Гравець 02';
+    board[5] = 'Гравець 02';
+
+    // Оновлюємо UI
+    cells.forEach((cell, index) => {
+        // cell.textContent = '';
+        cell.classList.remove('taken', 'X-player', 'O-player');
+
+        if (board[index] === 'Гравець 02') {
+            // cell.textContent = 'O';
+            cell.classList.add('O-player', 'taken');
+        }
+    });
+
+    // Показуємо лінію перемоги
+    showWinLine([3, 4, 5]);
+
+    // Запускаємо анімацію завершення гри
+    setTimeout(() => {
+        statusText.textContent = 'Гравець 02';
+        hideAfterGame("lose");
+        endGame();
+    }, 1000);
+}
+
+// Функція для симуляції нічиї
+function simulateDraw() {
+    // Очищаємо дошку
+    board = ['', '', '', '', '', '', '', '', ''];
+
+    // Встановлюємо нічийну дошку
+    board[0] = 'Гравець 01';
+    board[1] = 'Гравець 02';
+    board[2] = 'Гравець 01';
+    board[3] = 'Гравець 01';
+    board[4] = 'Гравець 02';
+    board[5] = 'Гравець 01';
+    board[6] = 'Гравець 02';
+    board[7] = 'Гравець 01';
+    board[8] = 'Гравець 02';
+
+    // Оновлюємо UI
+    cells.forEach((cell, index) => {
+        // cell.textContent = '';
+        cell.classList.remove('taken', 'X-player', 'O-player');
+
+        if (board[index] === 'Гравець 01') {
+            // cell.textContent = 'X';
+            cell.classList.add('X-player', 'taken');
+        } else if (board[index] === 'Гравець 02') {
+            // cell.textContent = 'O';
+            cell.classList.add('O-player', 'taken');
+        }
+    });
+
+    // Запускаємо анімацію завершення гри
+    setTimeout(() => {
+        statusText.textContent = "Нічия!";
+        hideAfterGame("draw");
+    }, 1000);
+}
+
+// Обробник кліків для тестових сценаріїв
+document.querySelectorAll('.test-scenario').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const scenario = e.target.dataset.scenario;
+
+        switch(scenario) {
+            case 'win':
+                simulateWin();
+                break;
+            case 'lose':
+                simulateLose();
+                break;
+            case 'draw':
+                simulateDraw();
+                break;
+            case 'reset':
+                initializeGame();
+                gameOverText.textContent = ``;
+                gameGrid.style.opacity = "1";
+                gameContainer.style.opacity = "1";
+                persLeft.style.transform = "translateX(0%)";
+                persRight.style.transform = "translateX(0%) scale(-1, 1)";
+                break;
+        }
+
+        // Ховаємо випадаюче меню після вибору
+        document.querySelector('.test-dropdown-content').style.display = 'none';
+    });
+});
+
+// Ховаємо випадаюче меню при кліку поза ним
+document.addEventListener('click', (e) => {
+
+    console.log(e.target);
+    if (!e.target.closest('.test-dropdown')) {
+        document.querySelector('.test-dropdown-content').style.display = 'none';
+    }else{
+        document.querySelector('.test-dropdown-content').style.display = 'block';
+    }
+});
