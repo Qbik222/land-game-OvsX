@@ -628,3 +628,7 @@ document.addEventListener('click', (e) => {
         document.querySelector('.test-dropdown-content').style.display = 'block';
     }
 });
+
+document.querySelector(".test-btn").addEventListener('click', (e) => {
+    document.querySelector('.test-menu').classList.toggle('hide');
+})
