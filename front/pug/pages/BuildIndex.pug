@@ -28,12 +28,18 @@
             .game-pers._left
             .game-pers._right
             .game-grid
+            .game-over.opacity
+            .game-coins
+                .coin
+                .coin
+                .coin
+                .coin
+                .coin
+                .coin
             #game(style="opacity: 0")
                 .win-line
                 each val, index in Array(9)
                     .cell(data-index=index)
-        button#restart(style="display: none") Перезапустити
-
     .overlay
         .popup._start#side-selection
             .popup__pers
@@ -62,7 +68,55 @@
             .popup__btn.btn.start-game почати гру
             .popup__reflection
                 img(src="img/popup/start/reflection-btn.png")
-        .popup._lose.hide
+        .popup._lose.hide-popup
+            .popup__pers
+                picture
+                    source(media="(max-width: 600px)" srcset='img/popup/pers-coin-mob.png')
+                    source(media="(max-width: 950px) and (max-width: 600px) and (orientation: landscape)" srcset='img/popup/pers-coin-mob.png')
+                    img(src="img/popup/pers-coin-desc.png" alt="Favbet" )
+            .popup__coins
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+            .popup__text не пощастило!
+            .popup__subtext забирай додаткові
+            .popup__bonus
+                .popup__bonus-item
+                    img(src="img/popup/bonus.png" alt="favbet")
+            .popup__info за будь-яку ставку з основного балансу. Деталі в особистому кабінеті на сайті #[a(href="#") favbet ua]
+            a(href='#').popup__btn.btn за бонусом
+            .popup__reflection
+                img(src="img/popup/reflection-btn.png")
+            button.popup__btn-restart.btn-2.restart-game грати ще
+
+        .popup._draw.hide-popup
+            .popup__pers
+                picture
+                    source(media="(max-width: 600px)" srcset='img/popup/pers-coin-mob.png')
+                    source(media="(max-width: 950px) and (max-width: 600px) and (orientation: landscape)" srcset='img/popup/pers-coin-mob.png')
+                    img(src="img/popup/pers-coin-desc.png" alt="Favbet" )
+            .popup__coins
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+                .popup__coins-item
+            .popup__text Ти був на рівні!
+            .popup__subtext забирай додаткові
+            .popup__bonus
+                .popup__bonus-item
+                    img(src="img/popup/bonus.png" alt="favbet")
+            .popup__info за будь-яку ставку з основного балансу. Деталі в особистому кабінеті на сайті #[a(href="#") favbet ua]
+            a(href='#').popup__btn.btn за бонусом
+            .popup__reflection
+                img(src="img/popup/reflection-btn.png")
+            button.popup__btn-restart.btn-2.restart-game грати ще
+        .popup._win.hide-popup
             .popup__pers
                 picture
                     source(media="(max-width: 600px)" srcset='img/pers-mob.png')
@@ -74,33 +128,17 @@
                 .popup__coins-item
                 .popup__coins-item
                 .popup__coins-item
-            .popup__text ти програв, лови фріспіни
-        .popup._draw.hide
-            .popup__pers
-                picture
-                    source(media="(max-width: 600px)" srcset='img/pers-mob.png')
-                    source(media="(max-width: 950px) and (max-width: 600px) and (orientation: landscape)" srcset='img/pers-mob.png')
-                    img(src="img/pers-desc.png" alt="Favbet" )
-            .popup__coins
                 .popup__coins-item
-                .popup__coins-item
-                .popup__coins-item
-                .popup__coins-item
-                .popup__coins-item
-            .popup__text нічия лови фріспіни
-        .popup._win.hide
-            .popup__pers
-                picture
-                    source(media="(max-width: 600px)" srcset='img/pers-mob.png')
-                    source(media="(max-width: 950px) and (max-width: 600px) and (orientation: landscape)" srcset='img/pers-mob.png')
-                    img(src="img/pers-desc.png" alt="Favbet" )
-            .popup__coins
-                .popup__coins-item
-                .popup__coins-item
-                .popup__coins-item
-                .popup__coins-item
-                .popup__coins-item
-            .popup__text ти виграв, лови фріспіни
+            .popup__text Ти переміг!
+            .popup__subtext забирай додаткові
+            .popup__bonus
+                .popup__bonus-item
+                    img(src="img/popup/bonus.png" alt="favbet")
+            .popup__info за будь-яку ставку з основного балансу. Деталі в особистому кабінеті на сайті #[a(href="#") favbet ua]
+            a(href='#').popup__btn.btn за бонусом
+            .popup__reflection
+                img(src="img/popup/reflection-btn.png")
+            button.popup__btn-restart.btn-2.restart-game грати ще
 .footer
     .footer__text  ТОВ «БУКМЕКЕРСЬКА КОМПАНІЯ «ФАВБЕТ». Ліцензія на провадження діяльності з організації та проведення букмекерської діяльності від 28.12.2022, видана згідно з рішенням КРАІЛ № 433 від 13.12.2022 та Ліцензія на провадження діяльності з організації та проведення азартних ігор казино в мережі Інтернет від 20.04.2021, видана згідно з рішенням КРАІЛ № 137 від 05.04.2021, зі змінами.
     .footer__wrap

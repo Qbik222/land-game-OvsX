@@ -3,7 +3,7 @@ const statusText = document.getElementById('status');
 const statusTextInfo = document.getElementById('status-text');
 const statusContainer = document.querySelector(".land__left");
 const statusBox = document.querySelector(".land__status");
-const restartBtn = document.getElementById('restart');
+const restartBtns = document.querySelectorAll('.restart-game');
 const overlay = document.querySelector(".overlay");
 const sideBtns = document.querySelectorAll('.side-btn');
 const startGame = document.querySelector('.start-game');
@@ -14,10 +14,13 @@ const statusIconO = document.querySelector('[data-player="O"]');
 const gameGrid = document.querySelector('.game-grid');
 const persLeft = document.querySelector('.game-pers._left');
 const persRight = document.querySelector('.game-pers._right');
+const gameOverText = document.querySelector('.game-over');
 
 let board = ['', '', '', '', '', '', '', '', ''];
 let isComputerX = true;
 let currentPlayer, computerPlayer;
+
+document.body.style.overflow = "hidden";
 
 if (isComputerX) {
     document.querySelector('[data-side="X"]').classList.remove('_active');
@@ -132,11 +135,13 @@ function bestMove() {
         const winningCombo = checkWinner(computerPlayer);
         if (winningCombo) {
             showWinLine(winningCombo);
-            statusText.textContent = `${computerPlayer}`;
-            showPopup("._lose");
-            endGame();
+            setTimeout(() =>{
+                statusText.textContent = `${computerPlayer}`;
+                hideAfterGame("lose")
+                endGame();
+            }, 1000)
         } else if (isDraw()) {
-            showPopup("._draw");
+            hideAfterGame("draw")
             statusText.textContent = "Нічия!";
         } else {
             setTimeout(() => {
@@ -201,16 +206,14 @@ function handleCellClick(e) {
             showWinLine(winningCombo);
             setTimeout(() => {
                 statusText.textContent = `${currentPlayer}`;
-                hideAfterGame()
-                // showPopup("._win");
+                hideAfterGame("win")
                 endGame();
-            }, 2000);
+            }, 1000);
         } else if (isDraw()) {
             setTimeout(() => {
-                hideAfterGame()
-                // showPopup("._draw");
+                hideAfterGame("draw")
                 statusText.textContent = "Нічия!";
-            }, 2000);
+            }, 1000);
         } else {
             currentPlayer = computerPlayer;
             statusText.textContent = `${computerPlayer}`;
@@ -219,12 +222,40 @@ function handleCellClick(e) {
     }
 }
 
-function hideAfterGame(){
+function hideAfterGame(winner){
     gameContainer.style.opacity = "0";
     gameGrid.style.opacity = "0";
     statusBox.classList.remove("O-player", "X-player");
-    persLeft.style.transform = "translateX(200%)";
-    persRight.style.transform = "translateX(-200%) scale(-1, 1)";
+    persLeft.style.transform = "translateX(220%)";
+    persRight.style.transform = "translateX(-220%) scale(-1, 1)";
+
+
+
+    if(winner === "lose"){
+        gameOverText.textContent = "не пощастило!"
+    }
+    if(winner === "win"){
+        gameOverText.textContent = "ти переміг!"
+    }
+    if(winner === "draw"){
+        gameOverText.textContent = "ти був на рівні!"
+    }
+
+    setTimeout(() =>{
+        gameOverText.classList.remove("opacity")
+        setTimeout(() =>{
+            if(winner === "draw"){
+                showPopup("._draw");
+            }
+            if(winner === "win"){
+                showPopup("._win");
+            }
+            if(winner === "lose"){
+                showPopup("._lose");
+            }
+        }, 500)
+
+    }, 1000)
 
 }
 
@@ -232,10 +263,40 @@ function endGame() {
     cells.forEach(cell => cell.classList.add('taken'));
 }
 
-restartBtn.addEventListener('click', () => {
-    isComputerX = !isComputerX;
-    initializeGame();
-});
+restartBtns.forEach(btn =>{
+    btn.addEventListener('click', () => {
+            isComputerX = !isComputerX;
+            initializeGame();
+            gameOverText.textContent = ``;
+            gameGrid.style.opacity = "1";
+            gameContainer.style.opacity = "1";
+            persLeft.style.transform = "translateX(0%)";
+            persRight.style.transform = "translateX(0%) scale(-1, 1)";
+            sideBtns.forEach(btn => {
+                btn.classList.remove("_active")
+                startGame.classList.add("disabled");
+                btn.addEventListener('click', () => {
+                    console.log(isComputerX);
+                    startGame.classList.remove("disabled");
+                    const side = btn.dataset.side;
+                    isComputerX = side !== 'X';
+                    sideBtns.forEach(item => item.classList.remove('_active'));
+                    btn.classList.add('_active');
+                });
+            });
+
+            // document.body.style.overflow = "auto";
+            document.querySelectorAll(".popup").forEach(popup => {
+                if(popup.classList.contains('_start')){
+                    popup.classList.remove('hide-popup');
+                    popup.classList.remove('hide');
+                    popup.style.opacity = "1";
+                }else{
+                    popup.classList.add('hide-popup');
+                }
+            })
+        });
+})
 
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 
@@ -251,8 +312,8 @@ sideBtns.forEach(btn => {
 startGame.addEventListener('click', () => {
     document.getElementById('side-selection').style.opacity = '0';
     gameContainer.style.opacity = '1';
-    restartBtn.style.display = '';
     landWrapper.classList.add("_decor");
+    document.body.style.overflow = "auto";
     setTimeout(() => {
         enableMouseScale(document.querySelector('.decor'));
     }, 2500);
@@ -261,9 +322,16 @@ startGame.addEventListener('click', () => {
 });
 
 function showPopup(popup) {
-    popup = overlay.querySelector(popup);
-    overlay.classList.remove("opacity");
-    popup.classList.remove("hide");
+
+    setTimeout(() => {
+        popup = overlay.querySelector(popup);
+        overlay.classList.remove("opacity");
+        document.body.style.overflow = "hidden";
+        setTimeout(() =>{
+            popup.classList.remove("hide-popup");
+        }, 500)
+    }, 2000)
+
 }
 
 function hidePopup(popup) {
@@ -304,7 +372,7 @@ function showWinLine(combo) {
     const positions = {
         '0,1,2': { top: '26%', left: '50%', rotate: '0deg', width: '80%' },
         '3,4,5': { top: '50%', left: '50%', rotate: '0deg', width: '80%' },
-        '6,7,8': { top: '78.33', left: '50%', rotate: '0deg', width: '80%' },
+        '6,7,8': { top: '78.33%', left: '50%', rotate: '0deg', width: '80%' },
         '0,3,6': { top: '50%', left: '24.5%', rotate: '90deg', width: '80%'},
         '1,4,7': { top: '50%', left: '50%', rotate: '90deg', width: '80%' },
         '2,5,8': { top: '50%', left: '76.5%', rotate: '90deg', width: '80%' },
@@ -313,6 +381,9 @@ function showWinLine(combo) {
     };
 
     const key = combo.sort((a, b) => a - b).join(',');
+
+    console.log(key);
+
     const pos = positions[key];
 
     console.log(pos.width);
@@ -335,15 +406,15 @@ testPopupButtons.forEach(button => {
         const popupClass = button.dataset.popup;
         const popup = overlay.querySelector(popupClass);
         const allPopups = overlay.querySelectorAll('.popup');
-        const isAlreadyOpen = !popup.classList.contains('hide');
+        const isAlreadyOpen = !popup.classList.contains('hide-popup');
 
         if (isAlreadyOpen) {
             overlay.classList.add('opacity');
-            popup.classList.add('hide');
+            popup.classList.add('hide-popup');
         } else {
-            allPopups.forEach(p => p.classList.add('hide'));
+            allPopups.forEach(p => p.classList.add('hide-popup'));
             overlay.classList.remove('opacity');
-            popup.classList.remove('hide');
+            popup.classList.remove('hide-popup');
         }
     });
 });
