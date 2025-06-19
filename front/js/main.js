@@ -1,3 +1,60 @@
+//TDS
+(function () {
+    var url = new URL(window.location.href);
+    var params = ['l', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'param1', 'param2', 'param3', 'param4', 'creative_type', 'creative_id'];
+    var linkParams = ['affid', 'cpaid']; // ищем в url redirectUrl в url:
+
+    if (url.searchParams.has('redirectUrl')) {
+        var redirectUrl = new URL(url.searchParams.get('redirectUrl'));
+
+        if (redirectUrl.href.match(/\//g).length === 4 && redirectUrl.searchParams.get('l')) {
+            //если ссылка в ссылка redirectUrl корректная
+            localStorage.setItem('redirectUrl', redirectUrl.href); // указываем точкой входа домен с протоколом из redirectUrl
+        }
+    }
+
+    params.forEach(function (param) {
+        if (url.searchParams.has(param)) localStorage.setItem(param, url.searchParams.get(param));
+    });
+
+    linkParams.forEach(function (linkParam) {
+        if (url.searchParams.has(linkParam)) localStorage.setItem(linkParam, url.searchParams.get(linkParam));
+    });
+
+    window.addEventListener('click', function (e) {
+        var link,
+            parent = e.target.closest('a');
+
+        if (parent.getAttribute('href') !== 'https://tds.favbet.partners') {
+            return;
+        }
+
+        if (parent) {
+            e.preventDefault();
+            var affid = localStorage.getItem('affid');
+            var cpaid = localStorage.getItem('cpaid');
+
+            if (localStorage.getItem("redirectUrl")) {
+                link = new URL(localStorage.getItem("redirectUrl"));
+            } else {
+                link = new URL(parent.href);
+                if (affid && cpaid) {
+                    link.pathname = '/' + affid + '/' + cpaid;
+                }
+            }
+
+            params.forEach(function (param) {
+                if (url.searchParams.has(param)) {
+                    link.searchParams.set(param, localStorage.getItem(param));
+                }
+            });
+
+            document.location.href = link;
+        }
+    });
+})();
+
+
 const cells = document.querySelectorAll('.cell');
 const statusText = document.getElementById('status');
 const statusTextInfo = document.getElementById('status-text');
@@ -55,8 +112,9 @@ function initializeGame() {
         line.style.transform = 'scaleX(0)';
     }
 
-    checkStatusIcon(currentPlayer);
+
     checkStatusContainer(currentPlayer);
+    checkStatusIcon(currentPlayer);
 
     statusText.textContent = `${currentPlayer}`;
     statusTextInfo.textContent = `ТВІЙ_ХІД`;
@@ -215,8 +273,11 @@ function handleCellClick(e) {
                 statusText.textContent = "Нічия!";
             }, 1000);
         } else {
+            setTimeout(() =>{
+                statusText.textContent = `${computerPlayer}`;
+            },1500)
             currentPlayer = computerPlayer;
-            statusText.textContent = `${computerPlayer}`;
+
             setTimeout(bestMove, 500);
         }
     }
@@ -399,7 +460,7 @@ function showWinLine(combo) {
     }
 }
 
-// test
+//// test
 const testPopupButtons = document.querySelectorAll('.test-popup');
 testPopupButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -441,7 +502,7 @@ style.textContent = `
   .test-dropdown {
     z-index: 9999;
   }
-  
+
   .test-dropdown-btn {
     background-color: #4CAF50;
     color: white;
@@ -451,7 +512,7 @@ style.textContent = `
     cursor: pointer;
     border-radius: 4px;
   }
-  
+
   .test-dropdown-content {
     display: none;
     position: absolute;
@@ -462,7 +523,7 @@ style.textContent = `
     border-radius: 4px;
     overflow: hidden;
   }
-  
+
   .test-dropdown-content button {
     color: black;
     padding: 12px 16px;
@@ -474,11 +535,11 @@ style.textContent = `
     background: none;
     cursor: pointer;
   }
-  
+
   .test-dropdown-content button:hover {
     background-color: #f1f1f1;
   }
-  
+
   .test-dropdown:hover .test-dropdown-content {
     display: block;
   }
@@ -632,3 +693,5 @@ document.addEventListener('click', (e) => {
 document.querySelector(".test-btn").addEventListener('click', (e) => {
     document.querySelector('.test-menu').classList.toggle('hide');
 })
+
+///// test
