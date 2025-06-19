@@ -197,7 +197,7 @@ function bestMove() {
                 statusText.textContent = `${computerPlayer}`;
                 hideAfterGame("lose")
                 endGame();
-            }, 1000)
+            }, 500)
         } else if (isDraw()) {
             hideAfterGame("draw")
             statusText.textContent = "Нічия!";
@@ -266,12 +266,12 @@ function handleCellClick(e) {
                 statusText.textContent = `${currentPlayer}`;
                 hideAfterGame("win")
                 endGame();
-            }, 1000);
+            }, 500);
         } else if (isDraw()) {
             setTimeout(() => {
                 hideAfterGame("draw")
                 statusText.textContent = "Нічия!";
-            }, 1000);
+            }, 500);
         } else {
             setTimeout(() =>{
                 statusText.textContent = `${computerPlayer}`;
@@ -314,9 +314,9 @@ function hideAfterGame(winner){
             if(winner === "lose"){
                 showPopup("._lose");
             }
-        }, 500)
+        }, 200)
 
-    }, 1000)
+    }, 200)
 
 }
 
@@ -431,7 +431,7 @@ function showWinLine(combo) {
 
     const positions = {
         '0,1,2': { top: '26%', left: '50%', rotate: '0deg', width: '80%' },
-        '3,4,5': { top: '50%', left: '50%', rotate: '0deg', width: '80%' },
+        '3,4,5': { top: '52%', left: '50%', rotate: '0deg', width: '80%' },
         '6,7,8': { top: '78.33%', left: '50%', rotate: '0deg', width: '80%' },
         '0,3,6': { top: '50%', left: '24.5%', rotate: '90deg', width: '80%'},
         '1,4,7': { top: '50%', left: '50%', rotate: '90deg', width: '80%' },
